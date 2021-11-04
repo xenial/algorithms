@@ -1,0 +1,11 @@
+\documentclass{article}
+\title{CF 782B}
+\author{xenial}
+\date{17/9/21}
+\begin{document}
+    \maketitle
+    We can solve the problem by binary searching the minimum time needed to gather everyone.
+    
+    To check whether we can gather everyone in $t$ time, we need to find the worst pair of friends e.g. the friends that take the longest time to gather. We can find the worst pair of friends by iterating through every friend and keeping track of $L$, the minimum point where someone can to get by moving forward for $t$ seconds, and $R$, the maximum point where someone can get to by moving backwards  for $t$ seconds.
+    If $L \geq R$, it is possible to gather everyone in $t$ time, otherwise not.
+\end{document}
