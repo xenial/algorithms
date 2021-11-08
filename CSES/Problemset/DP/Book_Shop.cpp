@@ -23,27 +23,16 @@ int main() {
 
     int n, x; cin >> n >> x;
 
-    vector<pair<int,int>> books(n);
-    vector<pair<int, vector<int>>> dp(x + 1);
+    vector<int> prices(n), pages(n);
+    for (int i = 0; i < n; i++) cin >> prices[i];
+    for (int i = 0; i < n; i++) cin >> pages[i];
 
-    dp[0].fi = 0;
-    for (int i = 0; i < n; i++) dp[0].se.pb(i);
-
-    for (int i = 0; i < n; i++) cin >> books[i].fi;
-    for (int i = 0; i < n; i++) cin >> books[i].se;
-
-    int ans = 0;
-    for (int i = 0; i <= x; i++) {
-        for (auto b : dp[i].se) {
-            if (i + books[b].fi <= x && dp[i].fi + books[b].se >= dp[i + books[b].fi].fi) {
-                dp[i + books[b].fi].fi = dp[i].fi + books[b].se;
-                dp[i + books[b].fi].se = dp[i].se;
-                if (dp[i].fi != dp[i + books[b].fi].fi)
-                    dp[i + books[b].fi].se.erase(lower_bound(all(dp[i + books[b].fi].se), b));
-            }
+    vector<vector<int>> dp(n + 1, vector<int>(x + 1));
+    for (int b = 0; b < n; b++) {
+        for (int m = 0; m <= x; m++) {
+            dp[b + 1][m] = dp[b][m];
+            if (m - prices[b] >= 0) dp[b + 1][m] = max(dp[b + 1][m], dp[b][m - prices[b]] + pages[b]);
         }
-        ans = max(ans, dp[i].fi);
     }
-
-    cout << ans;
+    cout << dp[n][x];
 }
