@@ -8,23 +8,6 @@ typedef long long ll;
 #define sz size
 #define rsz resize
 
-ll mod = 1e9+7;
-
-ll modpow(ll x, ll ex)
-{
-    ll ans = 1;
-    x = x % mod;
-  
-    if (x == 0) return 0; 
- 
-    while (ex > 0) {
-        if (ex & 1) ans = (ans * x) % mod;
-        ex = ex>>1;
-        x = (x*x) % mod;
-    }
-    return ans;
-}
-
 void set_io(string filename = "") {
     ios::sync_with_stdio(0);
 	cin.tie(0);
@@ -35,16 +18,28 @@ void set_io(string filename = "") {
     }
 }
 
+string s;
+
+bool valid(int mask) {
+    vector<bool> open(26, false);
+    for (int i = 0; i < s.sz(); i++) {
+        int ci = s[i] - 'a';
+        if (open[ci]) return false;
+        open[ci] = true;
+
+        if (mask & (1 << s.sz() - 2 - i)) open = vector<bool>(26, false);
+    }
+    return true;
+}
+
 int main() {
     set_io("");
 
-    string s; cin >> s;
-    vector<int> open(26, -1);
-    ll ans = 0;
+    cin >> s;
 
-    for (int i = 0; i < s.sz(); i++) {
-        
+    int ans = 0;
+    for (int i = 0; i < (1 << s.sz() - 1); i++) {
+        ans += valid(i);
     }
-
     cout << ans << endl;
 }
