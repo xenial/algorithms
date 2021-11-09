@@ -17,38 +17,42 @@ void set_io(string filename = "") {
     }
 }
 
-void solve(vector<pair<pair<int,int>,int>> times) {
-    sort(all(times));
-    vector<int> ans(times.sz()); ans[times[0].se] = 1;
-    priority_queue<pair<int,int>> q; q.push({-times[0].fi.se, 1});
-    int maxsz = 0;
 
-    for (int i = 1; i < times.sz(); i++) {
-        if (times[i].fi.fi <= abs(q.top().fi)) {
-            int rn = q.top().se + 1;
-            ans[times[i].se] = rn;
-            q.push({-times[i].fi.se, rn});
-        } else {
-            int rn = q.top().se;
-            ans[times[i].se] = rn;
-            q.pop();
-            q.push({-times[i].fi.se, rn});
-        }
-        maxsz = max(maxsz, (int)q.sz());
-    }
-
-    cout << maxsz << endl;
-    for (auto a : ans) cout << a << " ";
-}
 
 int main() {
     set_io("");
 
-    int n; cin >> n;
-    vector<pair<pair<int,int>,int>> times;
-    for (int i = 0; i < n; i++) {
-        int arr, dep; cin >> arr >> dep;
-        times.pb({{arr, dep}, i});
+    int N; cin >> N;
+    vector<pair<pair<int,int>,int>> customers(N);
+    for (int i = 0; i < N; i++) {
+        cin >> customers[i].fi.fi;
+        cin >> customers[i].fi.se;
+        customers[i].se = i;
     }
-    solve(times);
+
+    set<pair<int,int>, greater<pair<int,int>>> rooms;
+    sort(all(customers));
+
+    rooms.insert({customers[0].fi.se, 1});
+    int roomCount = 1, ans[N];
+    ans[customers[0].se] = 1;
+    for (int i = 1; i < customers.sz(); i++) {
+        auto customer = customers[i];
+        set<pair<int,int>>::iterator room = rooms.upper_bound({customer.fi.fi, 0});
+
+        if (room == rooms.end()) {
+            roomCount++;
+            rooms.insert({customer.fi.se, roomCount});
+            ans[customer.se] = roomCount;
+        } else {
+            ans[customer.se] = (*room).se;
+            rooms.erase(room);
+            rooms.insert({customer.fi.se, ans[customer.se]});
+        }
+    }
+
+    cout << roomCount << endl;
+    for (int i = 0; i < N; i++) {
+        cout << ans[i] << " ";
+    }
 }
