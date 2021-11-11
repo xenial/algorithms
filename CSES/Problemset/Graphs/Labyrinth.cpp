@@ -18,87 +18,80 @@ void set_io(string filename = "") {
     }
 }
 
-int dx[4] {-1, 0, 1, 0};
-int dy[4] {0, -1, 0, 1};
-char dir[4] {'R', 'D', 'L', 'U'};
+int dx[4] = {-1, 0, 1, 0};
+int dy[4] = {0, -1, 0, 1};
+string dirs = "RDLU";
+
 char Map[1001][1001];
-bool adj[1001][1001][4] = {{{false}}};
-bool visited[1001][1001];
-int depth[1001][1001];
+bool visited[1001][1001] = {{false}};
 int parent[1001][1001];
+int depth[1001][1001];
 
 int main() {
     set_io("");
+
+    fill_n(&depth[0][0], 1001*1001, INT_MAX);
 
     int N, M; cin >> N >> M;
 
     for (int y = 0; y < N; y++)
         for (int x = 0; x < M; x++) cin >> Map[x][y];
 
-    pair<int,int> start = {-1, -1}, end = {-1, -1};
+    pair<int,int> start, end;
     for (int y = 0; y < N; y++)
         for (int x = 0; x < M; x++) {
-            char cc = Map[x][y];
-            if (cc == '#') continue;
-
-            for (int d = 0; d < 4; d++) {
-                char c = Map[x + dx[d]][y + dy[d]];
-                if (c != '#') {
-                    if (c == 'A' && start.fi == -1) 
-                        start = {x + dx[d], y + dy[d]};
-                    else if (c == 'B' && end.fi == -1) 
-                        end = {x + dx[d], y + dy[d]};
-                    adj[x][y][d] = true;
-                    adj[x + dx[d]][y + dy[d]][(d + 2) % 4] = true;
-                }
-            }
+            if (Map[x][y] == 'A') start = {x, y};
+            if (Map[x][y] == 'B') end = {x, y};
         }
 
     queue<pair<int,int>> q;
     q.push(start);
 
-    fill_n(&depth[0][0], 1001*1001, (int)INT_MAX);
     depth[start.fi][start.se] = 0;
+    visited[start.fi][start.se] = true;
 
     while (!q.empty()) {
         auto [x, y] = q.front();
         q.pop();
 
         for (int d = 0; d < 4; d++) {
-            if (!adj[x][y][d]) continue;
-
             int nx = x + dx[d], ny = y + dy[d];
 
-            if (depth[x][y] + 1 < depth[nx][y + dy[d]]) {
+            if (nx < 0 || nx >= M) continue;
+            if (ny < 0 || ny >= N) continue;
+            if (visited[nx][ny] || Map[nx][ny] == '#') continue;
+
+            visited[nx][ny] = true;
+            q.push({nx, ny});
+
+            if (depth[nx][ny] > depth[x][y] + 1) {
                 depth[nx][ny] = depth[x][y] + 1;
                 parent[nx][ny] = (d + 2) % 4;
             }
-
-            if (visited[nx][ny]) continue;
-            q.push({nx, ny});
-            visited[nx][ny] = true;
         }
     }
 
-    if (!visited[end.fi][end.se] || depth[end.fi][end.se] == 0) {
-        cout << "NO";
+    if (!visited[end.fi][end.se]) {
+        cout << "NO" << endl;
         return 0;
-    } else cout << "YES" << endl << depth[end.fi][end.se] << endl;
+    }
 
-    int x = end.fi, y = end.se;
+    cout << "YES" << endl << depth[end.fi][end.se] << endl;
+
+    auto [x, y] = end;
     stack<char> ans;
+
     while (x != start.fi || y != start.se) {
         int d = parent[x][y];
-
-        ans.push(dir[d]);
-        
-        x = x + dx[d];
-        y = y + dy[d];
+        ans.push(dirs[d]);
+        x += dx[d];
+        y += dy[d];
     }
 
     while (!ans.empty()) {
         cout << ans.top();
         ans.pop();
     }
+
     cout << endl;
 }
