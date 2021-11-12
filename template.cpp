@@ -7,6 +7,7 @@ typedef long long ll;
 #define se second
 #define sz size
 #define rsz resize
+#define ii pair<int,int>
 
 void set_io(string filename = "") {
     ios::sync_with_stdio(0);
