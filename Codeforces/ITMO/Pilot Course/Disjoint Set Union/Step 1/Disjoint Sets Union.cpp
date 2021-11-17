@@ -22,7 +22,7 @@ void set_io(string filename = "") {
 int parent[100005], height[100005];
 
 int find(int x) {
-    if (x != parent[x]) parent[x] = find(x);
+    if (x != parent[x]) parent[x] = find(parent[x]);
     return parent[x];
 }
 
