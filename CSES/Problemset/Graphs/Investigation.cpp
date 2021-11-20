@@ -40,7 +40,7 @@ int main() {
     priority_queue<pair<ll, int>> q;
     q.push({0, 1});
     routes[1] = 1;
-    minflights[1] = maxflights[1] = 0;
+    minflights[1] = maxflights[1] = price[1] = 0;
 
     while (!q.empty()) {
         auto c = q.top();    
@@ -53,13 +53,19 @@ int main() {
         visited[cn] = true;
 
         for (auto n : adj[cn]) {
-            minflights[n.fi] = min(minflights[n.fi], minflights[cn] + 1);
-            maxflights[n.fi] = max(maxflights[n.fi], maxflights[cn] + 1);
+            if (price[n.fi] >= price[cn] + n.se) { 
+                if (price[n.fi] == price[cn] + n.se) {
+                    minflights[n.fi] = min(minflights[n.fi], minflights[cn] + 1);
+                    maxflights[n.fi] = max(maxflights[n.fi], maxflights[cn] + 1);
+                    routes[n.fi] = (routes[n.fi] + routes[cn] % mod) % mod;
+                } else {
+                    minflights[n.fi] = minflights[cn] + 1;
+                    maxflights[n.fi] = maxflights[cn] + 1;
+                    routes[n.fi] = routes[cn];
+                }
 
-            routes[n.fi] = max(routes[n.fi], routes[cn]);
-
-            if (price[n.fi] == cp + n.se) routes[n.fi] = (routes[n.fi] + routes[cn] % mod) % mod;
-            price[n.fi] = min(price[n.fi], cp + n.se);
+                price[n.fi] = price[cn] + n.se;
+            }
 
             q.push({-price[n.fi], n.fi});
         }
