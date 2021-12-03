@@ -37,12 +37,11 @@ int main() {
 			for (auto s : ans[i])
 				if (s[j] == '1') oc++;
 			
-			char lb;
-			lb = '0' + (int)(oc >= ans[i].sz() - oc);
+			char lb = '0' + (int)(oc >= ans[i].sz() - oc);
 
 			vector<string> buf;
 			for (auto s : ans[i]) {
-				if (i == 0) {
+				if (!i) {
 					if (s[j] == lb) buf.pb(s);
 				} else {
 					if (s[j] != lb) buf.pb(s);
