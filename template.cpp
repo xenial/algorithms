@@ -20,5 +20,5 @@ void set_io(string filename = "") {
 }
 
 int main() {
-    set_io("");
+	set_io("");
 }
