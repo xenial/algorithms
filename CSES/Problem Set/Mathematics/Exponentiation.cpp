@@ -6,10 +6,12 @@ typedef long long ll;
 #define fi first
 #define se second
 #define sz size
+#define rsz resize
+#define ii pair<int,int>
 
 void set_io(string filename = "") {
     ios::sync_with_stdio(0);
-	cin.tie(0);
+    cin.tie(0);
 
     if (filename != "") {
         freopen((filename + ".in").c_str(), "r", stdin);
@@ -17,30 +19,21 @@ void set_io(string filename = "") {
     }
 }
 
-int modpow(int a, int b, int mod) {
-    int h;
-    if (b == 0) return 1 % mod;
-    else if (b % 2) {
-        h = modpow(a, b / 2, mod);
-        h = h * h % mod;
-    } else {
-        h = modpow(a, b - 1, mod);
-        h = h * a % mod;
-    }
-    return h;
-}
-
-ll solve(int a, int b) {
-    int mod = 1000000007;
-    return modpow(a, b, mod);
+int mP(int x, int e, int mod) {
+    if (e == 0) return 1;
+    ll ans = mP(x, e / 2, mod);
+    ans = (ans * ans) % mod;
+    if (e % 2 == 1) ans = (ans * x) % mod;
+    return ans;
 }
 
 int main() {
-    set_io("");
+	set_io("");
 
     int n; cin >> n;
+
     while (n--) {
-        int a, b; cin >> a >> b;
-        cout << solve(a, b) << endl;
+        int x, e; cin >> x >> e;
+        cout << mP(x, e, 1e9 + 7) << endl;
     }
 }
