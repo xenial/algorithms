@@ -1,27 +1,44 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
+#define fi first
+#define se second
+#define sz size
+#define rsz resize
+#define ii pair<int,int>
 
-ll solve(vector<int> w, ll x) {
-    for (int i = 0; i < w.size(); i++) {
-        if (w[i] == x)
-            continue;
+void set_io(string filename = "") {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    if (filename != "") {
+        freopen((filename + ".in").c_str(), "r", stdin);
+        freopen((filename + ".out").c_str(), "w", stdout);
     }
 }
 
 int main() {
-    ios::sync_with_stdio(0);
-	cin.tie(0);
-    
-    ll n, x;
-    cin >> n, x;
-    vector<int> w;
+	set_io("");
 
-    while (n--) {
-        int x;
-        cin >> x;
-        w.push_back(x);
+    int n, x; cin >> n >> x;
+    vector<unsigned int> weights(n);
+
+    for (auto &w : weights) cin >> w;
+    sort(all(weights));
+
+    int ans = 0;
+    int l = 0, r = n - 1;
+    while (l <= r) {
+        ans++;
+        if (weights[l] + weights[r] > x) 
+            r--; 
+        else {
+            l++;
+            r--;
+        }
     }
 
-    cout << solve(w, x);
+    cout << ans << endl;
 }
