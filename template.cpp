@@ -8,6 +8,8 @@ typedef long long ll;
 #define sz size
 #define rsz resize
 #define ii pair<int,int>
+#define vi vector<int>
+#define vvi vector<vector<int>>
 
 void set_io(string filename = "") {
     ios::sync_with_stdio(0);
