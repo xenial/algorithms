@@ -31,13 +31,10 @@ int main() {
     for (int i = 1; i <= N; i++) cin >> arr[i];
 
     stack<int> s;
-    s.push(1);
-    ans[0] = 0;
+    for (int i = 1; i <= N; i++) {
+        while (!s.empty() && arr[s.top()] >= arr[i]) s.pop();
+        if (!s.empty()) ans[i] = s.top();
 
-    for (int i = 2; i <= N; i++) {
-        int c = i, p = s.top();
-        while (p != 0 && arr[c] <= arr[p]) p = ans[p];
-        ans[c] = p;
         s.push(i);
     }
 
