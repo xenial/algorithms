@@ -7,10 +7,13 @@ typedef long long ll;
 #define se second
 #define sz size
 #define rsz resize
+#define ii pair<int,int>
+#define vi vector<int>
+#define vvi vector<vector<int>>
 
 void set_io(string filename = "") {
     ios::sync_with_stdio(0);
-	cin.tie(0);
+    cin.tie(0);
 
     if (filename != "") {
         freopen((filename + ".in").c_str(), "r", stdin);
@@ -18,22 +21,24 @@ void set_io(string filename = "") {
     }
 }
 
-
+vector<int> stones;
+int dp[100005];
 
 int main() {
-    set_io("");
+	set_io("");
 
-    int n; cin >> n;
+    fill_n(&dp[0], 100005, 1e9);
 
-    int stones[n];
-    for (int i = 0; i < n; i++) cin >> stones[i];
-    
-    vector<int> dp(n, INT_MAX);
+    int N; cin >> N;
+
+    stones.rsz(N);
+    for (auto &s : stones) cin >> s;
+
     dp[0] = 0;
-
-    for (int i = 0; i < n; i++) {
-        if (i + 1 <= n) dp[i + 1] = min(dp[i + 1], dp[i] + abs(stones[i] - stones[i + 1]));
-        if (i + 2 <= n) dp[i + 2] = min(dp[i + 2], dp[i] + abs(stones[i] - stones[i + 2]));
+    for (int i = 1; i < N; i++) {
+        for (int j = 1; j < 3; j++) {
+            if (i - j >= 0) dp[i] = min(dp[i], dp[i - j] + abs(stones[i] - stones[i - j]));
+        }
     }
-    cout << dp[n - 1];
+    cout << dp[N - 1] << endl;
 }
