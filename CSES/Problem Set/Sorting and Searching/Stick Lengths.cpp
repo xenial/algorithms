@@ -25,6 +25,11 @@ int main() {
     int n; cin >> n;
     vector<ll> sticks(n);
 
+    if (n == 1) {
+        cout << 0 << endl;
+        return 0;
+    }
+
     for (auto &s : sticks) cin >> s;
     sort(all(sticks));
 
