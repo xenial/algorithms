@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define all(x) (x).begin(), (x).end()
+#define pb push_back
+#define fi first
+#define se second
+#define sz size
+#define rsz resize
+#define ii pair<int, int>
+#define vi vector<int>
+#define vvi vector<vector<int>>
+
+void set_io(string filename = "")
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+
+    if (filename != "")
+    {
+        freopen((filename + ".in").c_str(), "r", stdin);
+        freopen((filename + ".out").c_str(), "w", stdout);
+    }
+}
+
+int N;
+vvi adj;
+
+ii dfs(int n) {
+    queue<int> q;
+    q.push(n);
+    int depth[N + 5];
+    vector<bool> vis(N + 5);
+    depth[n] = 0;
+    ii r(0, 0);
+
+    while (!q.empty()) {
+        int cur = q.front();
+        q.pop();
+
+        if (vis[cur]) continue;
+        vis[cur] = true;
+
+        for (auto c : adj[cur]) {
+            if (vis[c]) continue;
+            q.push(c);
+            depth[c] = depth[cur] + 1;
+            if (r.se < depth[c]) {
+                r = ii(c, depth[c]);
+            }
+        }
+    }
+
+    return r;
+}
+
+int main()
+{
+    set_io("");
+
+    cin >> N;
+    adj.rsz(N + 1);
+
+    for (int i = 1; i < N; i++) {
+        int a, b; cin >> a >> b;
+        adj[a].pb(b);
+        adj[b].pb(a);
+    }
+
+    ii t = dfs(1);
+    ii r = dfs(t.fi);
+    cout << r.se << endl;
+}
