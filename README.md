@@ -1,4 +1,5 @@
 # Table of Contents
+**Please note that this is not actively updated and therefore might not contain every solution I've written. This serves as a quick means of navigating to the most important parts of the repo at a glance. See the commits page for up-to-date solutions with links to the corresponding problems.**
 ## Problem Sets
 | Problem Set | Solutions |
 | - | - |
